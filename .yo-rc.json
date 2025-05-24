@@ -1,0 +1,33 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "uploadExcell",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientTestFrameworks": [],
+    "clientTheme": "none",
+    "creationTimestamp": 1748063967030,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "feignClient": null,
+    "jhipsterVersion": "8.9.0",
+    "jwtSecretKey": "NGJkYTY4M2IyMTNmYTQ4M2Q3MDQ4MmJmZTI3ODA0ZmRlZDQ5MGRmMGE0NjI1NDcwMGY1YjM1ZGU0NGNkMmY2MzI5YmI4OGNiN2U0Y2MzOTRmODkzNDE4ZmI0MTNmOTk5OGNiNDM4ZjdhMWM4ZTYyMjFlZDhjYjBlZmQ1MzE3MzA=",
+    "languages": ["en"],
+    "microfrontend": null,
+    "microfrontends": [],
+    "nativeLanguage": "en",
+    "packageName": "com.vrbank.uploadexcell",
+    "prodDatabaseType": "oracle",
+    "reactive": false,
+    "serverPort": null,
+    "serviceDiscoveryType": null,
+    "syncUserWithIdp": null,
+    "testFrameworks": [],
+    "withAdminUi": true
+  }
+}
