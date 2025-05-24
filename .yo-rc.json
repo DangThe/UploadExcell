@@ -1,0 +1,33 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "authenticationType": "jwt",
+    "baseName": "uploadExcel",
+    "buildTool": "maven",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angular",
+    "clientTestFrameworks": [],
+    "clientTheme": "none",
+    "creationTimestamp": 1748073080141,
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableTranslation": true,
+    "entities": [],
+    "feignClient": null,
+    "jhipsterVersion": "8.9.0",
+    "jwtSecretKey": "MTg1N2I1NzI3N2MxYzgwMDQxYzRkYjg2NGY1ODljMDMzMGQ4ZjgzNmM5MDVhZTE0MDNhM2E1M2UzYWUxNWMzNzFiMDNjZWQ1YjgwNWZjOTBhNTljZTZlYjA2NjhlZDdmN2RjN2Y0NDE2Y2U3YTI0MWM2Y2I2YjNlYzFmMDhlZWU=",
+    "languages": ["en"],
+    "microfrontend": null,
+    "microfrontends": [],
+    "nativeLanguage": "en",
+    "packageName": "com.vrbank.uploadexcel",
+    "prodDatabaseType": "oracle",
+    "reactive": false,
+    "serverPort": null,
+    "serviceDiscoveryType": null,
+    "syncUserWithIdp": null,
+    "testFrameworks": [],
+    "withAdminUi": true
+  }
+}
