@@ -1,0 +1,241 @@
+<!-- Excel Upload Component Template -->
+<div class="excel-upload-container">
+  <div class="card">
+    <div class="card-header">
+      <h4 class="mb-0">
+        <i class="fas fa-file-excel me-2"></i>
+        Excel File Upload
+      </h4>
+    </div>
+
+    <div class="card-body">
+      <!-- Parameters Form -->
+      <form [formGroup]="uploadForm" class="mb-4">
+        <div class="row">
+          <!-- Branch Selection -->
+          <div class="col-md-6 mb-3">
+            <label for="branchCode" class="form-label required">Branch</label>
+            <select class="form-select" id="branchCode" formControlName="branchCode" (change)="onBranchChange($event.target.value)">
+              <option value="">Select Branch</option>
+              <option *ngFor="let branch of branches" [value]="branch.branch_code">
+                {{ branch.branch_code }} - {{ branch.branch_name }}
+              </option>
+            </select>
+            <div *ngIf="hasError('branchCode', 'required')" class="text-danger small">Branch is required</div>
+          </div>
+
+          <!-- Source Code Selection -->
+          <div class="col-md-6 mb-3">
+            <label for="sourceCode" class="form-label required">Source Code</label>
+            <select class="form-select" id="sourceCode" formControlName="sourceCode">
+              <option value="">Select Source Code</option>
+              <option *ngFor="let source of sourceCodes" [value]="source.source_code">
+                {{ source.source_code }}
+              </option>
+            </select>
+            <div *ngIf="hasError('sourceCode', 'required')" class="text-danger small">Source code is required</div>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Batch Number -->
+          <div class="col-md-4 mb-3">
+            <label for="batchNo" class="form-label required">Batch Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="batchNo"
+              formControlName="batchNo"
+              maxlength="20"
+              placeholder="Enter batch number"
+            />
+            <div *ngIf="hasError('batchNo', 'required')" class="text-danger small">Batch number is required</div>
+            <div *ngIf="hasError('batchNo', 'maxlength')" class="text-danger small">Batch number cannot exceed 20 characters</div>
+          </div>
+
+          <!-- Exchange Rate -->
+          <div class="col-md-4 mb-3">
+            <label for="exchRate" class="form-label required">Exchange Rate (USD)</label>
+            <div class="input-group">
+              <input
+                type="number"
+                class="form-control"
+                id="exchRate"
+                formControlName="exchRate"
+                step="0.000001"
+                min="0.000001"
+                placeholder="1.000000"
+              />
+              <span class="input-group-text">VND</span>
+            </div>
+            <div *ngIf="hasError('exchRate', 'required')" class="text-danger small">Exchange rate is required</div>
+            <div *ngIf="hasError('exchRate', 'min')" class="text-danger small">Exchange rate must be greater than 0</div>
+          </div>
+
+          <!-- Entry Date -->
+          <div class="col-md-4 mb-3">
+            <label for="entryDate" class="form-label required">Entry Date</label>
+            <input type="date" class="form-control" id="entryDate" formControlName="entryDate" />
+            <div *ngIf="hasError('entryDate', 'required')" class="text-danger small">Entry date is required</div>
+          </div>
+        </div>
+      </form>
+
+      <!-- File Upload Section -->
+      <div class="mb-4">
+        <label for="fileInput" class="form-label required">Excel File</label>
+        <div class="input-group">
+          <input type="file" class="form-control" id="fileInput" accept=".xlsx,.xls" (change)="onFileSelected($event)" />
+          <button type="button" class="btn btn-outline-secondary" (click)="downloadTemplate()">
+            <i class="fas fa-download me-1"></i>
+            Template
+          </button>
+        </div>
+        <div class="form-text">Supported formats: .xlsx, .xls</div>
+        <div *ngIf="selectedFile" class="mt-2">
+          <small class="text-success">
+            <i class="fas fa-file-check me-1"></i>
+            Selected: {{ selectedFile.name }} ({{ (selectedFile.size / 1024).toFixed(1) }} KB)
+          </small>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="d-flex gap-2 mb-4">
+        <button type="button" class="btn btn-primary" [disabled]="!selectedFile || uploadForm.invalid || uploading" (click)="uploadFile()">
+          <i class="fas fa-upload me-1" [class.fa-spin]="uploading"></i>
+          <span *ngIf="!uploading">Upload Data</span>
+          <span *ngIf="uploading">Uploading...</span>
+        </button>
+
+        <button type="button" class="btn btn-danger" [disabled]="uploading" (click)="deleteBatch()">
+          <i class="fas fa-trash me-1"></i>
+          Delete Batch
+        </button>
+
+        <button type="button" class="btn btn-secondary" [disabled]="uploading" (click)="clearForm()">
+          <i class="fas fa-broom me-1"></i>
+          Clear
+        </button>
+      </div>
+
+      <!-- Upload Progress -->
+      <div *ngIf="uploading" class="mb-4">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%">Processing...</div>
+        </div>
+      </div>
+
+      <!-- Upload Result -->
+      <div *ngIf="uploadResult" class="mb-4">
+        <div
+          class="alert"
+          [ngClass]="{
+            'alert-success': uploadResult.success,
+            'alert-warning': !uploadResult.success && uploadResult.errorCount > 0,
+            'alert-danger': !uploadResult.success && uploadResult.errorCount === uploadResult.totalRows,
+          }"
+        >
+          <h6 class="alert-heading">
+            <i
+              class="fas"
+              [ngClass]="{
+                'fa-check-circle': uploadResult.success,
+                'fa-exclamation-triangle': !uploadResult.success && uploadResult.errorCount > 0,
+                'fa-times-circle': !uploadResult.success && uploadResult.errorCount === uploadResult.totalRows,
+              }"
+            ></i>
+            Upload Result
+          </h6>
+          <p class="mb-2">{{ uploadResult.message }}</p>
+
+          <div class="row">
+            <div class="col-md-3"><strong>Total Rows:</strong> {{ uploadResult.totalRows }}</div>
+            <div class="col-md-3">
+              <strong>Success:</strong>
+              <span class="text-success">{{ uploadResult.successCount }}</span>
+            </div>
+            <div class="col-md-3">
+              <strong>Errors:</strong>
+              <span class="text-danger">{{ uploadResult.errorCount }}</span>
+            </div>
+            <div class="col-md-3" *ngIf="uploadResult.errorCount > 0">
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="exportErrorReport()">
+                <i class="fas fa-file-csv me-1"></i>
+                Export Errors
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Details -->
+        <div *ngIf="uploadResult.errors && uploadResult.errors.length > 0" class="mt-3">
+          <h6>Error Details:</h6>
+          <div class="table-responsive" style="max-height: 300px; overflow-y: auto">
+            <table class="table table-sm table-bordered">
+              <thead class="table-dark sticky-top">
+                <tr>
+                  <th>Row</th>
+                  <th>Error</th>
+                  <th>Account</th>
+                  <th>Currency</th>
+                  <th>Amount</th>
+                  <th>Dr/Cr</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let error of uploadResult.errors">
+                  <td>{{ error.rowNumber }}</td>
+                  <td class="text-danger">{{ error.errorMessage }}</td>
+                  <td>{{ error.account || '-' }}</td>
+                  <td>{{ error.ccyCd || '-' }}</td>
+                  <td>{{ error.amount || '-' }}</td>
+                  <td>{{ error.drCr || '-' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Batch Summary -->
+  <div class="card mt-4" *ngIf="batches.length > 0">
+    <div class="card-header">
+      <h5 class="mb-0">
+        <i class="fas fa-list me-2"></i>
+        Batch Summary
+      </h5>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Batch Number</th>
+              <th>Record Count</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let batch of batches">
+              <td>{{ batch.batchNo }}</td>
+              <td>{{ batch.recordCount }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="uploadForm.patchValue({ batchNo: batch.batchNo }); deleteBatch()"
+                >
+                  <i class="fas fa-trash me-1"></i>
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -222,3 +222,206 @@ jhipster:
 # ===================================================================
 
 # application:
+
+#Mới
+## application.yml
+#spring:
+#  application:
+#    name: uploadexcel
+#
+#  # Database Configuration
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/uploadexcel
+#    username: ${DB_USERNAME:uploadexcel}
+#    password: ${DB_PASSWORD:password}
+#    driver-class-name: org.postgresql.Driver
+#
+#  # JPA Configuration
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        format_sql: true
+#        show_sql: false
+#    open-in-view: false
+#
+#  # Liquibase
+#  liquibase:
+#    change-log: classpath:config/liquibase/master.xml
+#    contexts: dev,test
+#
+#  # File Upload Configuration
+#  servlet:
+#    multipart:
+#      enabled: true
+#      max-file-size: 50MB
+#      max-request-size: 50MB
+#      file-size-threshold: 2KB
+#
+#  # Jackson Configuration
+#  jackson:
+#    serialization:
+#      indent-output: true
+#      write-dates-as-timestamps: false
+#    time-zone: Asia/Ho_Chi_Minh
+#
+#  # Transaction Configuration
+#  transaction:
+#    default-timeout: 300
+#    rollback-on-commit-failure: true
+#
+## File Upload Settings
+#upload:
+#  excel:
+#    max-file-size: 50MB
+#    allowed-extensions:
+#      - xlsx
+#      - xls
+#    temp-directory: ${java.io.tmpdir}/excel-uploads
+#    max-rows-per-batch: 10000
+
+## Logging Configuration
+#logging:
+#  level:
+#    com.yourcompany.uploadexcel: DEBUG
+#    org.springframework.web: INFO
+#    org.springframework.security: INFO
+#    org.springframework.transaction: DEBUG
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
+#    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+#  file:
+#    name: logs/uploadexcel.log
+#    max-size: 10MB
+#    max-history: 30
+#
+## Management Endpoints
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: health,info,metrics,loggers
+#      base-path: /management
+#  endpoint:
+#    health:
+#      show-details: when_authorized
+#  metrics:
+#    export:
+#      prometheus:
+#        enabled: true
+#
+## Application specific settings
+#application:
+#  name: Excel Upload System
+#  version: 1.0.0
+#  excel-upload:
+#    batch-processing:
+#      enabled: true
+#      thread-pool-size: 5
+#    validation:
+#      strict-mode: true
+#      skip-empty-rows: true
+#    error-reporting:
+#      export-format: csv
+#      max-errors-in-memory: 1000
+#
+# Security Configuration (if needed)
+security:
+  jwt:
+    secret: ${JWT_SECRET:mySecretKey}
+    expiration: 86400
+#---
+## Development Profile
+#spring:
+#  config:
+#    activate:
+#      on-profile: dev
+#
+#  # H2 Database for development
+#  datasource:
+#    url: jdbc:h2:mem:uploadexcel;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#    show-sql: true
+#
+#logging:
+#  level:
+#    com.yourcompany.uploadexcel: DEBUG
+#    org.springframework.web: DEBUG
+#
+#---
+## Test Profile
+#spring:
+#  config:
+#    activate:
+#      on-profile: test
+#
+#  datasource:
+#    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+#
+#  servlet:
+#    multipart:
+#      max-file-size: 10MB
+#      max-request-size: 10MB
+#
+#logging:
+#  level:
+#    com.yourcompany.uploadexcel: INFO
+#    org.springframework: WARN
+#
+#---
+## Production Profile
+#spring:
+#  config:
+#    activate:
+#      on-profile: prod
+#
+#  datasource:
+#    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:uploadexcel}
+#    username: ${DB_USERNAME}
+#    password: ${DB_PASSWORD}
+#    hikari:
+#      maximum-pool-size: 20
+#      minimum-idle: 5
+#      connection-timeout: 30000
+#      idle-timeout: 600000
+#      max-lifetime: 1800000
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: validate
+#    show-sql: false
+#
+#  servlet:
+#    multipart:
+#      max-file-size: 100MB
+#      max-request-size: 100MB
+#
+#logging:
+#  level:
+#    com.yourcompany.uploadexcel: INFO
+#    org.springframework: WARN
+#    org.hibernate: WARN
+#  file:
+#    name: /var/log/uploadexcel/application.log
